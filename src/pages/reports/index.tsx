@@ -5,19 +5,11 @@ import styles from './styles.module.css';
 type Category = {
   id: number;
   category: string;
-  created_at: string;
-  updated_at: string;
-  pivot: {
-    report_id: number;
-    category_id: number;
-  };
 };
 
 type Status = {
   id: number;
   status: string;
-  created_at: string;
-  updated_at: string;
 };
 
 type Report = {
@@ -25,10 +17,6 @@ type Report = {
   location: string;
   photo: string;
   date: string;
-  user_id: number;
-  status_id: number;
-  created_at: string;
-  updated_at: string;
   status: Status;
   categories: Category[];
 };
@@ -48,6 +36,19 @@ type ApiResponse = {
   total: number;
 };
 
+function getStatusClassName(status: string): string {
+  switch (status.toLowerCase()) {
+    case 'pendente':
+      return styles.statusPending;
+    case 'em resolução':
+      return styles.statusInProgress;
+    case 'resolvido':
+      return styles.statusResolved;
+    default:
+      return '';
+  }
+}
+
 export function Reports() {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,7 +65,6 @@ export function Reports() {
     try {
       setLoading(true);
       const response = await fetch(`http://localhost:8000/api/reports?page=${page}`, {
-        method: "GET",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export function Reports() {
 
   function handleNextPage() {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev + 1);
+      setCurrentPage(prev => prev - 1);
     }
   }
 
@@ -118,7 +118,12 @@ export function Reports() {
         {reports.map((report) => (
           <div key={report.id} className={styles.reportCard}>
             <div className={styles.reportHeader}>
-              <h2 className={styles.title}>Report #{report.id}</h2>
+              <div className={styles.reportTitleContainer}>
+                <h2 className={styles.reportTitle}>Report #{report.id}</h2>
+                <span className={`${styles.statusBadge} ${getStatusClassName(report.status.status)}`}>
+                  {report.status.status}
+                </span>
+              </div>
               <Link
                 to={`/report/${report.id}`}
                 className={styles.detailsButton}
@@ -127,60 +132,67 @@ export function Reports() {
               </Link>
             </div>
 
-            <p className={styles.reportInfo}>
-              <strong>Localização:</strong> {report.location}
-            </p>
+            <div className={styles.reportInfo}>
+              <div className={styles.infoColumn}>
+                <p className={styles.infoItem}>
+                  <strong>Localização:</strong>
+                  <span>{report.location}</span>
+                </p>
 
-            <p className={styles.reportInfo}>
-              <strong>Data:</strong> {new Date(report.date).toLocaleDateString()}
-            </p>
-
-            <p className={styles.reportInfo}>
-              <strong>Status:</strong> {report.status.status}
-            </p>
-
-            {report.photo && (
-              <img
-                className={styles.reportPhoto}
-                src={`http://localhost:8000/storage/${report.photo}`}
-                alt={`Report ${report.id}`}
-              />
-            )}
-
-            <div className={styles.categoriesContainer}>
-              <strong className={styles.label}>Categorias:</strong>
-              <div className={styles.categoriesList}>
-                {report.categories.map((category) => (
-                  <span key={category.id} className={styles.categoryChip}>
-                    <span className={styles.categoryChipText}>{category.category}</span>
-                  </span>
-                ))}
+                <p className={styles.infoItem}>
+                  <strong>Data:</strong>
+                  <span>{new Date(report.date).toLocaleDateString()}</span>
+                </p>
               </div>
+
+              {report.photo && (
+                <div className={styles.photoContainer}>
+                  <img
+                    src={`http://localhost:8000/storage/${report.photo}`}
+                    alt={`Report ${report.id}`}
+                    className={styles.reportPhoto}
+                  />
+                </div>
+              )}
             </div>
+
+            {report.categories.length > 0 && (
+              <div className={styles.categoriesContainer}>
+                <div className={styles.categoriesList}>
+                  {report.categories.map((category) => (
+                    <span key={category.id} className={styles.categoryChip}>
+                      {category.category}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
 
-        <div className={styles.pagination}>
-          <button
-            className={styles.paginationButton}
-            onClick={handlePreviousPage}
-            disabled={currentPage === 1}
-          >
-            Anterior
-          </button>
+        {totalPages > 1 && (
+          <div className={styles.pagination}>
+            <button
+              className={styles.paginationButton}
+              onClick={handlePreviousPage}
+              disabled={currentPage === 1}
+            >
+              Anterior
+            </button>
 
-          <span className={styles.paginationInfo}>
-            Página {currentPage} de {totalPages}
-          </span>
+            <span className={styles.paginationInfo}>
+              Página {currentPage} de {totalPages}
+            </span>
 
-          <button
-            className={styles.paginationButton}
-            onClick={handleNextPage}
-            disabled={currentPage === totalPages}
-          >
-            Próxima
-          </button>
-        </div>
+            <button
+              className={styles.paginationButton}
+              onClick={handleNextPage}
+              disabled={currentPage === totalPages}
+            >
+              Próxima
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

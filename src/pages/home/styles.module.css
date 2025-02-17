@@ -1,13 +1,13 @@
 .pageContainer {
     min-height: 100vh;
-    height: 100vh; /* Garante altura total */
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--sky-50);
     padding: 16px;
-    margin: 0; /* Remove margens padrão */
-    position: fixed; /* Evita scroll */
+    margin: 0;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -22,7 +22,7 @@
     max-width: 400px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--sky-200);
-    transform: translateY(-10%); /* Move um pouco para cima */
+    transform: translateY(-10%);
   }
 
   .signInHeader h2 {
@@ -107,7 +107,7 @@
   @media (max-width: 480px) {
     .signInHeader {
       padding: 24px;
-      transform: translateY(-5%); /* Menor deslocamento em mobile */
+      transform: translateY(-5%);
     }
 
     .signInHeader h2 {

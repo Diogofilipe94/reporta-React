@@ -311,7 +311,6 @@ export function ReportDetails() {
                   <option value="baixa">Baixa</option>
                   <option value="média">Média</option>
                   <option value="alta">Alta</option>
-                  <option value="crítica">Crítica</option>
                 </select>
               </div>
 
