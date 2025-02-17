@@ -23,6 +23,7 @@ type Report = {
     category: string;
   }>;
   detail?: ReportDetail;
+  user: User;
 };
 
 type StatusOption = {
@@ -37,6 +38,14 @@ type StatusConfirmationModalProps = {
   currentStatus: string;
   newStatus: string;
 };
+
+type User = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  telephone: string;
+}
 
 const statusOptions: StatusOption[] = [
   { id: 1, label: 'pendente' },
@@ -107,7 +116,6 @@ export function ReportDetails() {
       if (!reportResponse.ok) {
         throw new Error("Erro ao buscar detalhes do report");
       }
-
       const reportData = await reportResponse.json();
       setReport(reportData);
 
@@ -374,6 +382,27 @@ export function ReportDetails() {
               Nenhum detalhe técnico adicionado ainda.
             </p>
           )}
+        </div>
+
+        {/* New section for User Information */}
+        <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Informações do Utilizador</h2>
+          <div className={styles.userInfo}>
+            <div className={styles.infoItem}>
+              <strong>Nome:</strong>
+              <p>{report.user.first_name} {report.user.last_name}</p>
+            </div>
+
+            <div className={styles.infoItem}>
+              <strong>Email:</strong>
+              <p>{report.user.email}</p>
+            </div>
+
+            <div className={styles.infoItem}>
+              <strong>Telefone:</strong>
+              <p>{report.user.telephone}</p>
+            </div>
+          </div>
         </div>
       </div>
 
