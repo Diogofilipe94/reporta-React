@@ -1,0 +1,121 @@
+.pageContainer {
+    min-height: 100vh;
+    height: 100vh; /* Garante altura total */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--sky-50);
+    padding: 16px;
+    margin: 0; /* Remove margens padrão */
+    position: fixed; /* Evita scroll */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .signInHeader {
+    background-color: white;
+    border-radius: 8px;
+    padding: 32px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--sky-200);
+    transform: translateY(-10%); /* Move um pouco para cima */
+  }
+
+  .signInHeader h2 {
+    color: var(--violet-900);
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .formGroup {
+    margin-bottom: 20px;
+  }
+
+  .formGroup label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-800);
+    margin-bottom: 8px;
+  }
+
+  .formGroup input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--sky-200);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--gray-800);
+    background-color: white;
+    transition: border-color 0.2s ease;
+  }
+
+  .formGroup input:focus {
+    outline: none;
+    border-color: var(--violet-300);
+    box-shadow: 0 0 0 3px var(--violet-100);
+  }
+
+  .formGroup input::placeholder {
+    color: var(--gray-500);
+  }
+
+  .error {
+    color: var(--red-600);
+    font-size: 14px;
+    margin-bottom: 16px;
+    text-align: center;
+    padding: 8px;
+    background-color: var(--sky-50);
+    border-radius: 4px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--violet-900);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+  }
+
+  button[type="submit"]:hover {
+    opacity: 0.9;
+  }
+
+  button[type="submit"]:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--violet-100);
+  }
+
+  button[type="submit"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 480px) {
+    .signInHeader {
+      padding: 24px;
+      transform: translateY(-5%); /* Menor deslocamento em mobile */
+    }
+
+    .signInHeader h2 {
+      font-size: 20px;
+    }
+
+    button[type="submit"] {
+      padding: 10px;
+      font-size: 14px;
+    }
+  }
