@@ -190,7 +190,7 @@ export function ReportDetails() {
       });
 
       if (!response.ok) {
-        throw new Error('Erro ao salvar detalhes');
+        throw new Error('Erro ao guardar detalhes');
       }
 
       const updatedDetails = await response.json();
@@ -199,7 +199,7 @@ export function ReportDetails() {
       await fetchReportDetails();
 
     } catch (error) {
-      console.error('Erro ao salvar detalhes:', error);
+      console.error('Erro ao guardar detalhes:', error);
     }
   }
 
@@ -352,7 +352,7 @@ export function ReportDetails() {
               </div>
 
               <button type="submit" className={styles.submitButton}>
-                Salvar
+                guardar
               </button>
             </form>
           ) : report.detail ? (
