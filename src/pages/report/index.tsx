@@ -13,6 +13,7 @@ type Report = {
   id: number;
   location: string;
   photo: string;
+  photo_url?: string;
   date: string;
   status: {
     id: number;
@@ -82,6 +83,22 @@ function StatusConfirmationModal({
   );
 }
 
+const BACKEND_BASE_URL = 'https://reporta.up.railway.app';
+
+// ⚠️ Função modificada para usar diretamente URLs completas ⚠️
+const getPhotoUrl = (photo: string | null | undefined) => {
+  // Se não houver photo, retorna null
+  if (!photo) return null;
+
+  // Se já for uma URL completa, retorna-a diretamente
+  if (photo.startsWith('http')) {
+    return photo;
+  }
+
+  // Caso contrário, constrói a URL completa
+  return `${BACKEND_BASE_URL}/storage/${photo}`;
+};
+
 export function ReportDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -92,6 +109,8 @@ export function ReportDetails() {
   const [editingDetails, setEditingDetails] = useState(false);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [pendingStatusId, setPendingStatusId] = useState<number | null>(null);
+  const [imageError, setImageError] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const [formData, setFormData] = useState<ReportDetail>({
     technical_description: '',
@@ -104,24 +123,34 @@ export function ReportDetails() {
     fetchReportDetails();
   }, [id]);
 
+  // Reset image states when loading a new report
+  useEffect(() => {
+    setImageError(false);
+    setImageLoaded(false);
+  }, [report]);
+
   async function fetchReportDetails() {
     try {
       setLoading(true);
-      const reportResponse = await fetch(`http://localhost:8000/api/reports/${id}`, {
+      const token = localStorage.getItem("token");
+
+      const reportResponse = await fetch(`${BACKEND_BASE_URL}/api/reports/${id}`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
       if (!reportResponse.ok) {
         throw new Error("Erro ao buscar detalhes do report");
       }
+
       const reportData = await reportResponse.json();
+      console.log('Dados do report recebidos:', reportData);
       setReport(reportData);
 
-      const detailsResponse = await fetch(`http://localhost:8000/api/reports/${id}/details`, {
+      const detailsResponse = await fetch(`${BACKEND_BASE_URL}/api/reports/${id}/details`, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -133,6 +162,7 @@ export function ReportDetails() {
 
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erro desconhecido");
+      console.error('Erro ao buscar relatório:', error);
     } finally {
       setLoading(false);
     }
@@ -147,10 +177,11 @@ export function ReportDetails() {
     if (pendingStatusId === null || !report) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/reports/${id}/status`, {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${BACKEND_BASE_URL}/api/reports/${id}/status`, {
         method: 'PATCH',
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ status_id: pendingStatusId }),
@@ -179,11 +210,12 @@ export function ReportDetails() {
     e.preventDefault();
 
     try {
+      const token = localStorage.getItem("token");
       const method = report?.detail ? 'PATCH' : 'POST';
-      const response = await fetch(`http://localhost:8000/api/reports/${id}/details`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/reports/${id}/details`, {
         method,
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
@@ -203,6 +235,11 @@ export function ReportDetails() {
     }
   }
 
+  function handleImageError(e: React.SyntheticEvent<HTMLImageElement>) {
+    console.error(`Erro ao carregar imagem do report ${id}`);
+    setImageError(true);
+  }
+
   if (loading) {
     return <div className={styles.loadingContainer}>Carregando...</div>;
   }
@@ -210,6 +247,18 @@ export function ReportDetails() {
   if (error || !report) {
     return <div className={styles.errorText}>Erro: {error}</div>;
   }
+
+  // 📷 CRUCIAL: Usar photo_url diretamente se existir, caso contrário, usar a foto original
+  // Log para debug
+  console.log('Dados da foto:', {
+    photo: report.photo,
+    photo_url: report.photo_url
+  });
+
+  // Usar photo_url se disponível (URL completa), caso contrário construir a URL
+  const photoUrl = report.photo_url || (report.photo ? `${BACKEND_BASE_URL}/storage/reports/${report.photo}` : null);
+
+  console.log('URL da imagem a ser usada:', photoUrl);
 
   return (
     <div className={styles.container}>
@@ -254,12 +303,34 @@ export function ReportDetails() {
             </div>
           </div>
 
-          {report.photo && (
+          {/* Renderização de imagem simplificada */}
+          {photoUrl && (
             <div className={styles.photoContainer}>
+              {imageError ? (
+                <div className={styles.imagePlaceholder}>
+                  <i className="fas fa-image" style={{ fontSize: '32px', color: '#666', marginBottom: '10px' }}></i>
+                  <p style={{ color: '#666', textAlign: 'center' }}>Imagem indisponível</p>
+                </div>
+              ) : !imageLoaded ? (
+                <div className={styles.imageLoading}>
+                  <div className={styles.spinner}></div>
+                  <p>A carregar imagem...</p>
+                </div>
+              ) : null}
+
+              {/* ⚠️ Usar a URL diretamente */}
               <img
-                src={`http://localhost:8000/storage/${report.photo}`}
+                src={photoUrl}
                 alt={`Report ${report.id}`}
-                className={styles.photo}
+                className={`${styles.photo} ${imageLoaded ? '' : styles.hiddenImage}`}
+                onLoad={() => {
+                  console.log('Imagem carregada com sucesso:', photoUrl);
+                  setImageLoaded(true);
+                }}
+                onError={(e) => {
+                  console.error(`Erro ao carregar imagem:`, photoUrl);
+                  setImageError(true);
+                }}
               />
             </div>
           )}
@@ -384,7 +455,6 @@ export function ReportDetails() {
           )}
         </div>
 
-        {/* New section for User Information */}
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Informações do Utilizador</h2>
           <div className={styles.userInfo}>

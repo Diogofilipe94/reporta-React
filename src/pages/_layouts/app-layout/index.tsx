@@ -43,7 +43,7 @@ export function AppLayout() {
         <Outlet />
       </main>
       <footer className={styles.footer}>
-        <p>© {new Date().getFullYear()} HotelBook - Todos os direitos reservados</p>
+        <p>© {new Date().getFullYear()} Reporta - Todos os direitos reservados</p>
       </footer>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.css';
@@ -16,6 +17,7 @@ type Report = {
   id: number;
   location: string;
   photo: string;
+  photo_url?: string;
   date: string;
   status: Status;
   categories: Category[];
@@ -36,11 +38,14 @@ type ApiResponse = {
   total: number;
 };
 
+const BACKEND_BASE_URL = 'https://reporta.up.railway.app';
+
 function getStatusClassName(status: string): string {
   switch (status.toLowerCase()) {
     case 'pendente':
       return styles.statusPending;
     case 'em resolução':
+    case 'em análise':
       return styles.statusInProgress;
     case 'resolvido':
       return styles.statusResolved;
@@ -56,6 +61,8 @@ export function Reports() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalReports, setTotalReports] = useState(0);
+  // Estado para controlar erros de imagem por report
+  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     fetchReports(currentPage);
@@ -64,7 +71,7 @@ export function Reports() {
   async function fetchReports(page: number) {
     try {
       setLoading(true);
-      const response = await fetch(`http://localhost:8000/api/reports?page=${page}`, {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/reports?page=${page}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           "Content-Type": "application/json",
@@ -80,6 +87,9 @@ export function Reports() {
       setTotalPages(data.last_page);
       setTotalReports(data.total);
       setError(null);
+
+      // Resetar erros de imagem ao carregar novos reports
+      setImageErrors({});
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erro desconhecido");
     } finally {
@@ -95,9 +105,37 @@ export function Reports() {
 
   function handleNextPage() {
     if (currentPage < totalPages) {
-      setCurrentPage(prev => prev - 1);
+      // Corrigido o bug que estava decrementando a página em vez de incrementar
+      setCurrentPage(prev => prev + 1);
     }
   }
+
+  // Função para obter a URL completa da imagem
+  const getPhotoUrl = (report: Report) => {
+    // Se tiver photo_url, usar diretamente
+    if (report.photo_url) {
+      return report.photo_url;
+    }
+
+    // Se tiver photo mas não for URL completa, construir URL
+    if (report.photo) {
+      if (report.photo.startsWith('http')) {
+        return report.photo;
+      }
+      return `${BACKEND_BASE_URL}/storage/reports/${report.photo}`;
+    }
+
+    return null;
+  };
+
+  // Função para lidar com erros de imagem
+  const handleImageError = (reportId: number) => {
+    console.error(`Erro ao carregar imagem do report ${reportId}`);
+    setImageErrors(prev => ({
+      ...prev,
+      [reportId]: true
+    }));
+  };
 
   if (loading) {
     return <div className={styles.loadingContainer}>Carregando...</div>;
@@ -115,60 +153,74 @@ export function Reports() {
       </div>
 
       <div className={styles.content}>
-        {reports.map((report) => (
-          <div key={report.id} className={styles.reportCard}>
-            <div className={styles.reportHeader}>
-              <div className={styles.reportTitleContainer}>
-                <h2 className={styles.reportTitle}>Report #{report.id}</h2>
-                <span className={`${styles.statusBadge} ${getStatusClassName(report.status.status)}`}>
-                  {report.status.status}
-                </span>
-              </div>
-              <Link
-                to={`/report/${report.id}`}
-                className={styles.detailsButton}
-              >
-                Ver Detalhes
-              </Link>
-            </div>
+        {reports.map((report) => {
+          const photoUrl = getPhotoUrl(report);
+          const hasImageError = imageErrors[report.id];
 
-            <div className={styles.reportInfo}>
-              <div className={styles.infoColumn}>
-                <p className={styles.infoItem}>
-                  <strong>Localização:</strong>
-                  <span>{report.location}</span>
-                </p>
-
-                <p className={styles.infoItem}>
-                  <strong>Data:</strong>
-                  <span>{new Date(report.date).toLocaleDateString()}</span>
-                </p>
+          return (
+            <div key={report.id} className={styles.reportCard}>
+              <div className={styles.reportHeader}>
+                <div className={styles.reportTitleContainer}>
+                  <h2 className={styles.reportTitle}>Report #{report.id}</h2>
+                  <span className={`${styles.statusBadge} ${getStatusClassName(report.status.status)}`}>
+                    {report.status.status}
+                  </span>
+                </div>
+                <Link
+                  to={`/report/${report.id}`}
+                  className={styles.detailsButton}
+                >
+                  Ver Detalhes
+                </Link>
               </div>
 
-              {report.photo && (
-                <div className={styles.photoContainer}>
-                  <img
-                    src={`http://localhost:8000/storage/${report.photo}`}
-                    alt={`Report ${report.id}`}
-                    className={styles.reportPhoto}
-                  />
+              <div className={styles.reportInfo}>
+                <div className={styles.infoColumn}>
+                  <p className={styles.infoItem}>
+                    <strong>Localização:</strong>
+                    <span>{report.location}</span>
+                  </p>
+
+                  <p className={styles.infoItem}>
+                    <strong>Data:</strong>
+                    <span>{new Date(report.date).toLocaleDateString()}</span>
+                  </p>
+                </div>
+
+                {photoUrl && (
+                  <div className={styles.photoContainer}>
+                    {hasImageError ? (
+                      <div className={styles.imagePlaceholder}>
+                        <i className="fas fa-image" style={{ fontSize: '24px', color: '#666' }}></i>
+                        <p style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>Imagem indisponível</p>
+                      </div>
+                    ) : (
+                      <img
+                        src={photoUrl}
+                        alt={`Report ${report.id}`}
+                        className={styles.reportPhoto}
+                        onError={() => handleImageError(report.id)}
+                        loading="lazy" // Adiciona carregamento lazy para melhorar performance
+                      />
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {report.categories.length > 0 && (
+                <div className={styles.categoriesContainer}>
+                  <div className={styles.categoriesList}>
+                    {report.categories.map((category) => (
+                      <span key={category.id} className={styles.categoryChip}>
+                        {category.category}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-
-            {report.categories.length > 0 && (
-              <div className={styles.categoriesContainer}>
-                <div className={styles.categoriesList}>
-                  {report.categories.map((category) => (
-                    <span key={category.id} className={styles.categoryChip}>
-                      {category.category}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
 
         {totalPages > 1 && (
           <div className={styles.pagination}>
