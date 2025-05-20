@@ -271,8 +271,10 @@ export function ReportDetails() {
 
           <div className={styles.infoGrid}>
             <div className={styles.infoItem}>
-              <strong>Localização:</strong>
-              <p>{report.location}</p>
+              <strong>Morada:</strong>
+              <p>{report.location.split("- Coordenadas", 1)}</p>
+              <strong>Coordenadas:</strong>
+              <p>{report.location.split("- Coordenadas:")[1]?.trim() || ''}</p>
             </div>
 
             <div className={styles.infoItem}>
