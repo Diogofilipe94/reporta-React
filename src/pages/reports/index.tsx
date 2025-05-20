@@ -161,7 +161,7 @@ export function Reports() {
             <div key={report.id} className={styles.reportCard}>
               <div className={styles.reportHeader}>
                 <div className={styles.reportTitleContainer}>
-                  <h2 className={styles.reportTitle}>Report #{report.id}</h2>
+                  <h2 className={styles.reportTitle}>Report Nº {report.id}</h2>
                   <span className={`${styles.statusBadge} ${getStatusClassName(report.status.status)}`}>
                     {report.status.status}
                   </span>

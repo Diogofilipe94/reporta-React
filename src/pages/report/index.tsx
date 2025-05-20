@@ -85,12 +85,9 @@ function StatusConfirmationModal({
 
 const BACKEND_BASE_URL = 'https://reporta.up.railway.app';
 
-// ⚠️ Função modificada para usar diretamente URLs completas ⚠️
 const getPhotoUrl = (photo: string | null | undefined) => {
-  // Se não houver photo, retorna null
   if (!photo) return null;
 
-  // Se já for uma URL completa, retorna-a diretamente
   if (photo.startsWith('http')) {
     return photo;
   }
@@ -123,7 +120,6 @@ export function ReportDetails() {
     fetchReportDetails();
   }, [id]);
 
-  // Reset image states when loading a new report
   useEffect(() => {
     setImageError(false);
     setImageLoaded(false);
@@ -248,14 +244,11 @@ export function ReportDetails() {
     return <div className={styles.errorText}>Erro: {error}</div>;
   }
 
-  // 📷 CRUCIAL: Usar photo_url diretamente se existir, caso contrário, usar a foto original
-  // Log para debug
   console.log('Dados da foto:', {
     photo: report.photo,
     photo_url: report.photo_url
   });
 
-  // Usar photo_url se disponível (URL completa), caso contrário construir a URL
   const photoUrl = report.photo_url || (report.photo ? `${BACKEND_BASE_URL}/storage/reports/${report.photo}` : null);
 
   console.log('URL da imagem a ser usada:', photoUrl);
@@ -269,7 +262,7 @@ export function ReportDetails() {
         >
           Voltar
         </button>
-        <h1 className={styles.title}>Report #{report.id}</h1>
+        <h1 className={styles.title}>Report Nº{report.id}</h1>
       </div>
 
       <div className={styles.content}>
@@ -303,7 +296,6 @@ export function ReportDetails() {
             </div>
           </div>
 
-          {/* Renderização de imagem simplificada */}
           {photoUrl && (
             <div className={styles.photoContainer}>
               {imageError ? (
@@ -318,7 +310,6 @@ export function ReportDetails() {
                 </div>
               ) : null}
 
-              {/* ⚠️ Usar a URL diretamente */}
               <img
                 src={photoUrl}
                 alt={`Report ${report.id}`}
@@ -354,7 +345,7 @@ export function ReportDetails() {
               onClick={() => setEditingDetails(!editingDetails)}
               className={styles.editButton}
             >
-              {editingDetails ? 'Cancelar' : report.detail ? 'Editar' : 'Adicionar'}
+              {editingDetails ? 'Cancelar' : report.detail ? 'Editar detalhes' : 'Adicionar detalhes'}
             </button>
           </div>
 
@@ -450,7 +441,7 @@ export function ReportDetails() {
             </div>
           ) : (
             <p className={styles.noDetails}>
-              Nenhum detalhe técnico adicionado ainda.
+              Ainda sem detalhes técnicos.
             </p>
           )}
         </div>
