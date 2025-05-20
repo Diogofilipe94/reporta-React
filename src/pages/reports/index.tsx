@@ -1,7 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './styles.module.css';
+import { useTheme } from '../../contexts/ThemeContext';
 
 type Category = {
   id: number;
@@ -61,8 +61,10 @@ export function Reports() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalReports, setTotalReports] = useState(0);
-  // Estado para controlar erros de imagem por report
+  // State for image loading errors by report
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
+
+  const { isDark } = useTheme();
 
   useEffect(() => {
     fetchReports(currentPage);
@@ -88,7 +90,7 @@ export function Reports() {
       setTotalReports(data.total);
       setError(null);
 
-      // Resetar erros de imagem ao carregar novos reports
+      // Reset image errors when loading new reports
       setImageErrors({});
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erro desconhecido");
@@ -105,19 +107,18 @@ export function Reports() {
 
   function handleNextPage() {
     if (currentPage < totalPages) {
-      // Corrigido o bug que estava decrementando a página em vez de incrementar
       setCurrentPage(prev => prev + 1);
     }
   }
 
-  // Função para obter a URL completa da imagem
+  // Function to get full image URL
   const getPhotoUrl = (report: Report) => {
-    // Se tiver photo_url, usar diretamente
+    // If photo_url exists, use it directly
     if (report.photo_url) {
       return report.photo_url;
     }
 
-    // Se tiver photo mas não for URL completa, construir URL
+    // If photo exists but isn't a complete URL, build the URL
     if (report.photo) {
       if (report.photo.startsWith('http')) {
         return report.photo;
@@ -128,7 +129,7 @@ export function Reports() {
     return null;
   };
 
-  // Função para lidar com erros de imagem
+  // Function to handle image loading errors
   const handleImageError = (reportId: number) => {
     console.error(`Erro ao carregar imagem do report ${reportId}`);
     setImageErrors(prev => ({
@@ -178,7 +179,7 @@ export function Reports() {
                 <div className={styles.infoColumn}>
                   <p className={styles.infoItem}>
                     <strong>Localização:</strong>
-                    <span>{report.location}</span>
+                    <span>{report.location.split('- Coordenadas')[0]}</span>
                   </p>
 
                   <p className={styles.infoItem}>
@@ -191,8 +192,7 @@ export function Reports() {
                   <div className={styles.photoContainer}>
                     {hasImageError ? (
                       <div className={styles.imagePlaceholder}>
-                        <i className="fas fa-image" style={{ fontSize: '24px', color: '#666' }}></i>
-                        <p style={{ fontSize: '12px', color: '#666', marginTop: '5px' }}>Imagem indisponível</p>
+                        <p style={{ fontSize: '12px', color: isDark ? '#909090' : '#666', marginTop: '5px' }}>Imagem indisponível</p>
                       </div>
                     ) : (
                       <img
@@ -200,7 +200,7 @@ export function Reports() {
                         alt={`Report ${report.id}`}
                         className={styles.reportPhoto}
                         onError={() => handleImageError(report.id)}
-                        loading="lazy" // Adiciona carregamento lazy para melhorar performance
+                        loading="lazy"
                       />
                     )}
                   </div>

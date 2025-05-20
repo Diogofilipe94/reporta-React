@@ -51,9 +51,9 @@
   --primary: var(--third);
   --secondary: var(--secondary);
   --accent: var(--fourth);
-  --error: #ff6b6b;
-  --warning: #ffb142;
-  --success: #58d68d;
+  --error: #e74c3c;
+  --warning: #f39c12;
+  --success: #27ae60;
   --border: var(--third);
   --divider: var(--gray600);
   --shadow: rgba(0, 0, 0, 0.3);
@@ -66,7 +66,7 @@
 }
 
 body {
-  background-color: var(--white);
+  background-color: var(--background);
   color: var(--textPrimary);
   font-family: 'Inter', sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;

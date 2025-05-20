@@ -1,11 +1,13 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import styles from './styles.module.css';
 import { useAuth } from "../../../hooks";
-import { CircleUser } from "lucide-react";
+import { CircleUser, Sun, Moon } from "lucide-react";
+import { useTheme } from "../../../contexts/ThemeContext";
 
 export function AppLayout() {
   const navigate = useNavigate();
   const isLoggedIn = useAuth();
+  const { isDark, setColorScheme } = useTheme();
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -20,6 +22,10 @@ export function AppLayout() {
     }
   }
 
+  function toggleTheme() {
+    setColorScheme(isDark ? 'light' : 'dark');
+  }
+
   return (
     <div className={styles.container}>
       <header className={styles.headerContainer}>
@@ -28,11 +34,14 @@ export function AppLayout() {
             <h1>Reporta</h1>
           </Link>
           <nav>
-            <div onClick={handleUserClick}>
+            <div className={styles.iconButton} onClick={toggleTheme}>
+              {isDark ? <Sun size={22} /> : <Moon size={22} />}
+            </div>
+            <div className={styles.iconButton} onClick={handleUserClick}>
               <CircleUser size={24} />
             </div>
             {isLoggedIn && (
-              <button onClick={handleLogout}>
+              <button className={styles.logoutButton} onClick={handleLogout}>
                 Sair
               </button>
             )}

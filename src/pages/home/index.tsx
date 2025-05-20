@@ -2,6 +2,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
 import { useAuth } from "../../hooks";
+import { useTheme } from "../../contexts/ThemeContext";
 
 export function Home() {
   const [email, setEmail] = useState("");
@@ -9,6 +10,7 @@ export function Home() {
   const [error, setError] = useState<string | null>(null);
   const isLoggedIn = useAuth();
   const navigate = useNavigate();
+  const { isDark } = useTheme();
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -58,7 +60,7 @@ export function Home() {
 
   return (
     <div className={styles.pageContainer}>
-      <div className={styles.signInHeader}>
+      <div className={`${styles.signInHeader} ${isDark ? styles.darkMode : ''}`}>
         <h2>Entrar</h2>
         <form onSubmit={handleSignIn}>
           {error && <p className={styles.error}>{error}</p>}
