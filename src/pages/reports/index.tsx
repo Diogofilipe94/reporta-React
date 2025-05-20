@@ -138,7 +138,7 @@ export function Reports() {
   };
 
   if (loading) {
-    return <div className={styles.loadingContainer}>Carregando...</div>;
+    return <div className={styles.loadingContainer}>A carregar...</div>;
   }
 
   if (error) {
