@@ -49,11 +49,6 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.reportCard:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px var(--shadow);
-}
-
 .reportHeader {
   padding: 1rem;
   display: flex;

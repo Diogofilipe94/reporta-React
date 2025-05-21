@@ -279,9 +279,7 @@ export function ReportDetails() {
       </div>
 
       <div className={styles.minimalContent}>
-        {/* Layout Grid Principal */}
         <div className={styles.minimalGrid}>
-          {/* Coluna da imagem */}
           <div className={styles.imageColumn}>
             {photoUrl ? (
               <div className={styles.minimalPhotoContainer}>
