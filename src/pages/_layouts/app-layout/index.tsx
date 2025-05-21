@@ -47,8 +47,8 @@ export function AppLayout() {
               <Switch
                 onChange={toggleTheme}
                 checked={isDark}
-                offColor="#fdfbd4"
-                onColor="#545333"
+                offColor="#fff"
+                onColor="#2c2c2c"
                 offHandleColor="#878672"
                 onHandleColor="#d9d7b6"
                 height={24}
