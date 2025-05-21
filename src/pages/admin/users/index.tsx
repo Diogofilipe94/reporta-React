@@ -149,7 +149,6 @@ export function AdminUsers() {
   function applyFilters() {
     let result = [...users];
 
-    // Filtro de pesquisa
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       result = result.filter(user =>
