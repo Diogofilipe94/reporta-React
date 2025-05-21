@@ -169,7 +169,6 @@ export function AdminUserDetails() {
     );
   }
 
-  // Formatação de data
   const formattedCreatedDate = new Date(user.created_at).toLocaleDateString('pt-PT', {
     day: 'numeric',
     month: 'long',

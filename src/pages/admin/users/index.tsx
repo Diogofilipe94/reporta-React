@@ -1,6 +1,6 @@
 // src/pages/admin/users/index.tsx
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.css';
 
 type Role = {
@@ -38,6 +38,7 @@ export function AdminUsers() {
       setLoading(true);
       const token = localStorage.getItem("token");
 
+      // Use a rota com o prefixo 'admin'
       const response = await fetch(`${BACKEND_BASE_URL}/api/admin/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -46,16 +47,15 @@ export function AdminUsers() {
 
       if (!response.ok) {
         if (response.status === 403) {
-          setError("Você não tem permissões de administrador");
+          setError("Não tem permissões de administrador");
           return;
         }
-        throw new Error("Erro ao procurar utilizadores");
+        throw new Error("Erro ao buscar utilizadores");
       }
 
       const data = await response.json();
       setUsers(data.users);
 
-      // Inicializa o estado dos roles com os valores atuais
       const initialRoles: Record<number, number> = {};
       data.users.forEach((user: User) => {
         initialRoles[user.id] = user.role.id;
@@ -83,10 +83,9 @@ export function AdminUsers() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar papel do utilizador");
+        throw new Error("Erro ao atualizar o role do utlizador");
       }
 
-      // Atualiza o utilizador na lista
       fetchUsers();
 
     } catch (error) {
@@ -106,10 +105,9 @@ export function AdminUsers() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao eliminar utilizador");
+        throw new Error("Erro ao eliminar o utilizador");
       }
 
-      // Remove o utilizador da lista
       setUsers(users.filter(user => user.id !== userId));
       setConfirmDelete(null);
 

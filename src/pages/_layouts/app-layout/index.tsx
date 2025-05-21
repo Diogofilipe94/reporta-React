@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import styles from './styles.module.css';
 import { useAuth } from "../../../hooks";
-import { CircleUser, Sun, Moon, Shield } from "lucide-react";
+import { Sun, Moon, Shield } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 
 export function AppLayout() {
@@ -12,14 +12,6 @@ export function AppLayout() {
   function handleLogout() {
     localStorage.removeItem("token");
     navigate("/");
-  }
-
-  function handleUserClick() {
-    if (!isLoggedIn) {
-      navigate("/");
-    } else {
-      navigate("/user");
-    }
   }
 
   function toggleTheme() {
