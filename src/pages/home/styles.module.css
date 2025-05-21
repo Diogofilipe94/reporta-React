@@ -83,6 +83,27 @@ button[type="submit"]:focus {
   box-shadow: 0 0 0 2px rgba(84, 83, 51, 0.4);
 }
 
+.platformInfo {
+  color: var(--textSecondary);
+  text-align: center;
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.mobileInfo {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--divider);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--textSecondary);
+}
+
+.loadingButton {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 @media (max-width: 480px) {
   .signInHeader {
     padding: 1.5rem;

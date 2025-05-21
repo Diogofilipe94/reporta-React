@@ -24,10 +24,104 @@
   font-weight: 500;
 }
 
+/* Filtros */
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.searchContainer {
+  flex: 1;
+  position: relative;
+  min-width: 250px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--textSecondary);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 2.5rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--divider);
+  background-color: var(--surface);
+  color: var(--textPrimary);
+  font-size: 0.875rem;
+}
+
+.clearButton {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--textSecondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.roleFilterContainer {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.roleFilterSelect {
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  border: 1px solid var(--divider);
+  background-color: var(--surface);
+  color: var(--textPrimary);
+  font-size: 0.875rem;
+  min-width: 150px;
+}
+
+.clearFiltersButton {
+  background-color: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearFiltersButton:hover {
+  background-color: var(--primary);
+  color: var(--textTertiary);
+}
+
 .content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
+}
+
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  background-color: var(--surface);
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.noResults p {
+  color: var(--textSecondary);
+  font-size: 0.875rem;
 }
 
 .loadingContainer,
@@ -128,6 +222,21 @@
   font-size: 0.875rem;
 }
 
+.viewButton {
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.viewButton:hover {
+  background-color: var(--secondary);
+}
+
 .deleteButton {
   background-color: var(--error);
   color: var(--textTertiary);
@@ -172,24 +281,10 @@
   display: inline-flex;
   padding: 0.25rem 0.75rem;
   border-radius: 2rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 500;
 }
 
-.role-1 {
-  background-color: rgba(3, 169, 244, 0.1);
-  color: #03a9f4;
-}
-
-.role-2 {
-  background-color: rgba(156, 39, 176, 0.1);
-  color: #9c27b0;
-}
-
-.role-3 {
-  background-color: rgba(244, 67, 54, 0.1);
-  color: #f44336;
-}
 
 .confirmDeleteContainer {
   padding: 1rem;
@@ -240,6 +335,214 @@
   background-color: #d32f2f;
 }
 
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: var(--surface);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--divider);
+}
+
+.modalTitle {
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: var(--textSecondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.closeButton:hover {
+  background-color: var(--divider);
+}
+
+.modalBody {
+  padding: 1.5rem;
+}
+
+.modalText {
+  color: var(--textPrimary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* User Detail Modal Styles */
+.userDetailContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.userProfileHeader {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.largeAvatar {
+  width: 4rem;
+  height: 4rem;
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+.userMainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.userFullName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--textPrimary);
+  margin: 0;
+}
+
+.userDetailDivider {
+  height: 1px;
+  background-color: var(--divider);
+  margin: 0.75rem 0;
+}
+
+.userDetailSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin: 0;
+}
+
+.userDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.25rem;
+}
+
+.detailGridItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detailGridLabel {
+  color: var(--textSecondary);
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.detailGridValue {
+  color: var(--textPrimary);
+  font-size: 0.9375rem;
+}
+
+.roleBadgeContainer {
+  margin-top: 0.5rem;
+}
+
+.userDetailActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--divider);
+}
+
+.actionGroup {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.updateRoleButton {
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.updateRoleButton:hover:not(:disabled) {
+  background-color: var(--secondary);
+}
+
+.updateRoleButton:disabled {
+  background-color: var(--textSecondary);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deleteUserButton {
+  background-color: var(--error);
+  color: var(--textTertiary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deleteUserButton:hover {
+  background-color: #d32f2f;
+}
+
 @media (max-width: 768px) {
   .userHeader {
     flex-direction: column;
@@ -249,6 +552,37 @@
 
   .userActions {
     width: 100%;
-    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .roleFilterContainer {
+    width: 100%;
+  }
+
+  .roleFilterSelect {
+    flex: 1;
+  }
+
+  .userProfileHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .userDetailActions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .actionGroup {
+    width: 100%;
+  }
+
+  .roleSelect, .updateRoleButton, .deleteUserButton {
+    flex: 1;
   }
 }
