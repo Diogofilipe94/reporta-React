@@ -1,12 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 import { AppLayout } from "./pages/_layouts/app-layout";
 import { Home } from "./pages/home";
-import { User } from "./pages/user";
 import { Reports } from "./pages/reports";
 import { ReportDetails } from "./pages/report";
-
-
-
+import { AdminUsers } from "./pages/admin/users";
+import { AdminUserDetails } from "./pages/admin/user-details";
 
 export const router = createBrowserRouter([
   {
@@ -17,16 +15,20 @@ export const router = createBrowserRouter([
         element: <Home />
       },
       {
-        path: "/user",
-        element: <User />
-      },
-      {
         path: "/reports",
         element: <Reports />
       },
       {
         path: "/report/:id",
         element: <ReportDetails />
+      },
+      {
+        path: "/admin/users",
+        element: <AdminUsers />
+      },
+      {
+        path: "/admin/users/:id",
+        element: <AdminUserDetails />
       }
     ]
   },

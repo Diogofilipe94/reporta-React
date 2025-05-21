@@ -1,0 +1,351 @@
+/* src/pages/admin/user-details/styles.module.css */
+.minimalContainer {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.minimalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--divider);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.minimalBackButton {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--textSecondary);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.minimalBackButton:hover {
+  transform: translateX(-3px);
+  color: var(--primary);
+}
+
+.minimalTitle {
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--textPrimary);
+  margin: 0;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.roleSelect {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid var(--divider);
+  background-color: var(--surface);
+  color: var(--textPrimary);
+  font-size: 0.875rem;
+}
+
+.updateRoleButton {
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.updateRoleButton:hover:not(:disabled) {
+  background-color: var(--secondary);
+}
+
+.updateRoleButton:disabled {
+  background-color: var(--textSecondary);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.deleteUserButton {
+  background-color: var(--error);
+  color: var(--textTertiary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.deleteUserButton:hover {
+  background-color: #d32f2f;
+}
+
+.minimalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.loadingContainer,
+.errorContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  gap: 1rem;
+}
+
+.errorText {
+  color: var(--error);
+  font-size: 1rem;
+}
+
+.goBackButton {
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.goBackButton:hover {
+  background-color: var(--secondary);
+}
+
+.userProfileCard {
+  background-color: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px var(--shadow);
+  overflow: hidden;
+}
+
+.userHeader {
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  border-bottom: 1px solid var(--divider);
+}
+
+.largeAvatar {
+  width: 5rem;
+  height: 5rem;
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.userMainInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.userName {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--textPrimary);
+  margin: 0;
+}
+
+.userEmail {
+  font-size: 1rem;
+  color: var(--textSecondary);
+  margin: 0;
+}
+
+.roleBadgeContainer {
+  margin-top: 0.5rem;
+}
+
+.roleBadge {
+  display: inline-flex;
+  padding: 0.35rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.role-1 {
+  background-color: rgba(3, 169, 244, 0.1);
+  color: #03a9f4;
+}
+
+.role-2 {
+  background-color: rgba(156, 39, 176, 0.1);
+  color: #9c27b0;
+}
+
+.role-3 {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: #f44336;
+}
+
+.infoSection {
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid var(--divider);
+}
+
+.infoSection:last-child {
+  border-bottom: none;
+}
+
+.sectionTitle {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--primary);
+  margin: 0 0 1.5rem;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.infoItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.infoItem h4 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--textSecondary);
+  margin: 0;
+}
+
+.infoItem p {
+  font-size: 1rem;
+  color: var(--textPrimary);
+  margin: 0;
+}
+
+/* Estilos do Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modalContent {
+  background-color: var(--surface);
+  border-radius: 8px;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px var(--shadow);
+}
+
+.modalTitle {
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.modalText {
+  color: var(--textPrimary);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.cancelButton, .confirmButton {
+  flex: 1;
+  padding: 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.cancelButton {
+  background-color: transparent;
+  color: var(--textSecondary);
+  border: 1px solid var(--divider);
+}
+
+.cancelButton:hover {
+  background-color: var(--divider);
+}
+
+.confirmButton {
+  background-color: var(--primary);
+  color: var(--textTertiary);
+  border: none;
+}
+
+.confirmButton:hover {
+  background-color: var(--secondary);
+}
+
+@media (max-width: 768px) {
+  .minimalHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .actionButtons {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .roleSelect, .updateRoleButton, .deleteUserButton {
+    flex: 1;
+  }
+
+  .userHeader {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+}

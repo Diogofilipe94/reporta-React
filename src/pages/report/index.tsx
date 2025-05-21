@@ -85,14 +85,17 @@ function StatusConfirmationModal({
 
 const BACKEND_BASE_URL = 'https://reporta.up.railway.app';
 
-const getPhotoUrl = (photo: string | null | undefined) => {
+const getPhotoUrl = (photo: string | null | undefined, photoUrl?: string) => {
+  if (photoUrl) return photoUrl;
+
   if (!photo) return null;
 
   if (photo.startsWith('http')) {
     return photo;
   }
 
-  return `${BACKEND_BASE_URL}/storage/${photo}`;
+  // Senão, montamos o URL completo
+  return `${BACKEND_BASE_URL}/storage/reports/${photo}`;
 };
 
 export function ReportDetails() {
@@ -238,7 +241,7 @@ export function ReportDetails() {
     return <div className={styles.errorText}>Erro: {error}</div>;
   }
 
-  const photoUrl = report.photo_url || (report.photo ? `${BACKEND_BASE_URL}/storage/reports/${report.photo}` : null);
+  const photoUrl = getPhotoUrl(report.photo, report.photo_url);
 
   // Formatação de data para um formato mais elegante
   const formattedDate = new Date(report.date).toLocaleDateString('pt-PT', {

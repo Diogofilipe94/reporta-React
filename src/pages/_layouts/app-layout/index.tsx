@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import styles from './styles.module.css';
 import { useAuth } from "../../../hooks";
-import { CircleUser, Sun, Moon } from "lucide-react";
+import { CircleUser, Sun, Moon, Shield } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 
 export function AppLayout() {
@@ -26,6 +26,23 @@ export function AppLayout() {
     setColorScheme(isDark ? 'light' : 'dark');
   }
 
+  // Função para verificar se o usuário tem o papel de admin
+  function isAdmin() {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+      // Decode JWT sem validação (apenas para verificar payload)
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(window.atob(base64));
+
+      return payload.role === 'admin';
+    } catch (e) {
+      return false;
+    }
+  }
+
   return (
     <div className={styles.container}>
       <header className={styles.headerContainer}>
@@ -37,9 +54,17 @@ export function AppLayout() {
             <div className={styles.iconButton} onClick={toggleTheme}>
               {isDark ? <Sun size={22} /> : <Moon size={22} />}
             </div>
+
+            {isLoggedIn && isAdmin() && (
+              <Link to="/admin/users" className={styles.iconButton} title="Administração">
+                <Shield size={22} />
+              </Link>
+            )}
+
             <div className={styles.iconButton} onClick={handleUserClick}>
               <CircleUser size={24} />
             </div>
+
             {isLoggedIn && (
               <button className={styles.logoutButton} onClick={handleLogout}>
                 Sair
@@ -48,9 +73,11 @@ export function AppLayout() {
           </nav>
         </div>
       </header>
+
       <main className={styles.main}>
         <Outlet />
       </main>
+
       <footer className={styles.footer}>
         <p>© {new Date().getFullYear()} Reporta - Todos os direitos reservados</p>
       </footer>
