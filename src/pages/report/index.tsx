@@ -267,10 +267,10 @@ export function ReportDetails() {
           <select
             value={report.status.id}
             onChange={(e) => handleStatusChange(e.target.value)}
-            className={`${styles.minimalStatusSelect} ${styles[`status-${report.status.id}`]}`}
+            className={`${styles.minimalStatusSelect}`}
           >
             {statusOptions.map(status => (
-              <option key={status.id} value={status.id}>
+              <option key={status.id} value={status.id} className={styles[`status-${status.id}`]}>
                 {status.label}
               </option>
             ))}

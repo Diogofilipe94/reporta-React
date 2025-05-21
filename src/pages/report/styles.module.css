@@ -1,4 +1,3 @@
-/* Quando não há detalhes */
 .minimalNoDetails {
   display: flex;
   flex-direction: column;
@@ -16,9 +15,8 @@
   color: var(--textSecondary);
   font-size: 0.875rem;
   margin: 0;
-}/* Estilos minimalistas para a página de detalhes do report */
+}
 
-/* Container principal */
 .minimalContainer {
   width: 100%;
   max-width: 1200px;
@@ -28,7 +26,6 @@
   color: var(--textPrimary);
 }
 
-/* Header minimalista */
 .minimalHeader {
   display: flex;
   align-items: center;
@@ -77,7 +74,6 @@
   color: var(--primary);
 }
 
-/* Status select com cores personalizadas */
 .statusContainer {
   position: relative;
 }
@@ -95,28 +91,15 @@
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: calc(100% - 10px) center;
+  background-color: var(--primary);
 }
 
-.status-1 {
-  background-color: var(--danger);
-}
-
-.status-2 {
-  background-color: var(--warning);
-}
-
-.status-3 {
-  background-color: var(--success);
-}
-
-/* Layout de conteúdo */
 .minimalContent {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
 }
 
-/* Grid principal para imagem e informações */
 .minimalGrid {
   display: grid;
   grid-template-columns: 2fr 3fr;
@@ -124,7 +107,6 @@
   align-items: start;
 }
 
-/* Coluna da imagem */
 .imageColumn {
   position: relative;
 }
@@ -192,7 +174,6 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Coluna de informações */
 .infoColumn {
   display: flex;
   flex-direction: column;
@@ -227,7 +208,6 @@
   line-height: 1.5;
 }
 
-/* Categorias */
 .minimalCategoriesList {
   display: flex;
   flex-wrap: wrap;
@@ -245,7 +225,6 @@
   align-items: center;
 }
 
-/* Seções */
 .minimalSection {
   background-color: var(--surface);
   border-radius: 0.75rem;
@@ -284,7 +263,6 @@
   color: var(--textTertiary);
 }
 
-/* Detalhes */
 .detailsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -348,7 +326,6 @@
   color: var(--primary) !important;
 }
 
-/* Formulário */
 .minimalForm {
   width: 100%;
 }
@@ -374,7 +351,6 @@
   color: var(--textSecondary);
 }
 
-/* Estilização dos inputs adaptados ao tema */
 .minimalInput,
 .minimalSelect,
 .minimalTextarea {
@@ -422,7 +398,6 @@
   background-color: var(--secondary);
 }
 
-/* Botões de ação */
 .formActions {
   display: flex;
   justify-content: flex-end;
@@ -444,7 +419,6 @@
   background-color: var(--secondary);
 }
 
-/* Botão de adicionar */
 .minimalAddButton {
   background-color: var(--third);
   color: var(--secondary);
@@ -461,7 +435,6 @@
   color: var(--textTertiary);
 }
 
-/* Card de usuário */
 .userCard {
   display: flex;
   align-items: center;
@@ -515,7 +488,6 @@
   color: var(--textSecondary);
 }
 
-/* Responsividade */
 @media (max-width: 768px) {
   .minimalContainer {
     padding: 1rem;
@@ -558,7 +530,6 @@
   }
 }
 
-/* Estilos do Modal (originais mantidos para compatibilidade) */
 .modalOverlay {
   position: fixed;
   top: 0;
