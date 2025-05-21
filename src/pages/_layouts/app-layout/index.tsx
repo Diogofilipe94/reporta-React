@@ -26,7 +26,7 @@ export function AppLayout() {
     setColorScheme(isDark ? 'light' : 'dark');
   }
 
-  // Função para verificar se o usuário tem o papel de admin
+  // Função para verificar se o utilizador tem o papel de admin
   function isAdmin() {
     const token = localStorage.getItem("token");
     if (!token) return false;
@@ -60,11 +60,6 @@ export function AppLayout() {
                 <Shield size={22} />
               </Link>
             )}
-
-            <div className={styles.iconButton} onClick={handleUserClick}>
-              <CircleUser size={24} />
-            </div>
-
             {isLoggedIn && (
               <button className={styles.logoutButton} onClick={handleLogout}>
                 Sair

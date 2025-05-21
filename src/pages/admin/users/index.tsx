@@ -49,7 +49,7 @@ export function AdminUsers() {
           setError("Você não tem permissões de administrador");
           return;
         }
-        throw new Error("Erro ao buscar usuários");
+        throw new Error("Erro ao procurar utilizadores");
       }
 
       const data = await response.json();
@@ -83,10 +83,10 @@ export function AdminUsers() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao atualizar papel do usuário");
+        throw new Error("Erro ao atualizar papel do utilizador");
       }
 
-      // Atualiza o usuário na lista
+      // Atualiza o utilizador na lista
       fetchUsers();
 
     } catch (error) {
@@ -106,10 +106,10 @@ export function AdminUsers() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao excluir usuário");
+        throw new Error("Erro ao eliminar utilizador");
       }
 
-      // Remove o usuário da lista
+      // Remove o utilizador da lista
       setUsers(users.filter(user => user.id !== userId));
       setConfirmDelete(null);
 

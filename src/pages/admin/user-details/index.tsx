@@ -142,7 +142,7 @@ export function AdminUserDetails() {
       });
 
       if (!response.ok) {
-        throw new Error("Erro ao excluir usuário");
+        throw new Error("Erro ao eliminar utilizador");
       }
 
       navigate('/admin/users');
