@@ -1,7 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import styles from './styles.module.css';
 import { useAuth } from "../../../hooks";
-import { LogOutIcon, Sun, Moon } from "lucide-react";
+import { LogOutIcon, Sun, Moon, BarChart3 } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { RiAdminLine } from "react-icons/ri";
 // Importe o componente Switch
@@ -24,11 +24,26 @@ export function AppLayout() {
   function isAdmin() {
     const token = localStorage.getItem("token");
     if (!token) return false;
+
     try {
       const base64Url = token.split('.')[1];
       const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
       const payload = JSON.parse(window.atob(base64));
       return payload.role === 'admin' || payload.role === 2;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function isAdminOrCurator() {
+    const token = localStorage.getItem("token");
+    if (!token) return false;
+
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const payload = JSON.parse(window.atob(base64));
+      return payload.role === 'admin' || payload.role === 'curator' || payload.role === 2 || payload.role === 3;
     } catch (e) {
       return false;
     }
@@ -41,8 +56,9 @@ export function AppLayout() {
           <Link to="/reports" className={styles.naming}>
             <h1>Reporta</h1>
           </Link>
+
           <nav>
-            {/* Substitua o div pelo componente Switch */}
+            {/* Switch do tema */}
             <label className={styles.switchLabel}>
               <Switch
                 onChange={toggleTheme}
@@ -79,12 +95,23 @@ export function AppLayout() {
               />
             </label>
 
+            {/* Dashboard - para admins e curadores */}
+            {isLoggedIn && isAdminOrCurator() && (
+              <Link to="/admin/dashboard" className={styles.iconButton} title="Dashboard">
+                <p>Dashboard</p>
+                <BarChart3 size={22} />
+              </Link>
+            )}
+
+            {/* Admin Users - apenas para admins */}
             {isLoggedIn && isAdmin() && (
               <Link to="/admin/users" className={styles.iconButton} title="Administração">
                 <p>Admin</p>
                 <RiAdminLine size={22} />
               </Link>
             )}
+
+            {/* Logout */}
             {isLoggedIn && (
               <button className={styles.logoutButton} onClick={handleLogout}>
                 <p>Sair</p>
@@ -94,9 +121,11 @@ export function AppLayout() {
           </nav>
         </div>
       </header>
+
       <main className={styles.main}>
         <Outlet />
       </main>
+
       <footer className={styles.footer}>
         <p>© {new Date().getFullYear()} Reporta - Todos os direitos reservados</p>
       </footer>

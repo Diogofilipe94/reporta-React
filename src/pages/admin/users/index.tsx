@@ -392,7 +392,7 @@ export function AdminUsers() {
 
               {confirmDelete === user.id && (
                 <div className={styles.confirmDeleteContainer}>
-                  <p className={styles.confirmText}>Tem certeza que deseja eliminar este utilizador?</p>
+                  <p className={styles.confirmText}>Tem a certeza que deseja eliminar este utilizador?</p>
                   <div className={styles.confirmButtons}>
                     <button
                       className={styles.cancelButton}
@@ -542,7 +542,7 @@ export function AdminUsers() {
         title="Atualizar permissões do Utilizador"
         message={
           pendingRoleChange
-            ? `Tem certeza que deseja alterar as permissões do utilizador para "${
+            ? `Tem a certeza que deseja alterar as permissões do utilizador para "${
                 pendingRoleChange.roleId === 1
                   ? 'Utilizador'
                   : pendingRoleChange.roleId === 2
