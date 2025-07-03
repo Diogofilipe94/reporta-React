@@ -172,6 +172,7 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loadingErrors, setLoadingErrors] = useState<string[]>([]);
 
   const navigate = useNavigate();
   const { isDark } = useTheme();
@@ -200,6 +201,39 @@ export function AdminDashboard() {
     }
   };
 
+  const fetchEndpoint = async (endpoint: string) => {
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/api/admin/dashboard/${endpoint}`, getAuthHeaders());
+
+      if (!response.ok) {
+        if (response.status === 403) {
+          throw new Error('Acesso negado. Apenas administradores e curadores podem aceder ao dashboard.');
+        }
+
+        // Para erros 500, tentar obter detalhes do erro
+        let errorMessage = `Erro ${response.status}`;
+        try {
+          const errorData = await response.json();
+          if (errorData.error) {
+            errorMessage += `: ${errorData.error}`;
+          }
+          if (errorData.debug) {
+            console.error(`Debug info for ${endpoint}:`, errorData.debug);
+          }
+        } catch (e) {
+          // Se não conseguir parsear o erro, usar mensagem genérica
+        }
+
+        throw new Error(errorMessage);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error(`Erro ao carregar ${endpoint}:`, error);
+      throw error;
+    }
+  };
+
   const fetchDashboardData = async () => {
     if (!checkAdminAccess()) {
       setError('Acesso negado. Apenas administradores e curadores podem aceder ao dashboard.');
@@ -210,35 +244,46 @@ export function AdminDashboard() {
     try {
       setLoading(true);
       setError(null);
+      setLoadingErrors([]);
 
       const endpoints = ['overview', 'resolution', 'categories', 'users', 'financial'];
-      const promises = endpoints.map(endpoint =>
-        fetch(`${BACKEND_BASE_URL}/api/admin/dashboard/${endpoint}`, getAuthHeaders())
-      );
+      const results: any[] = [];
+      const errors: string[] = [];
 
-      const responses = await Promise.all(promises);
-
-      // Check for errors
-      for (const response of responses) {
-        if (!response.ok) {
-          if (response.status === 403) {
-            throw new Error('Acesso negado. Apenas administradores e curadores podem aceder ao dashboard.');
-          }
-          throw new Error(`Erro ao carregar dados do dashboard: ${response.status}`);
+      // Tentar carregar cada endpoint individualmente
+      for (const endpoint of endpoints) {
+        try {
+          const data = await fetchEndpoint(endpoint);
+          results.push(data);
+        } catch (error) {
+          console.error(`Erro ao carregar ${endpoint}:`, error);
+          errors.push(`${endpoint}: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+          results.push(null); // Adicionar null para manter ordem
         }
       }
 
-      const data = await Promise.all(responses.map(r => r.json()));
-
+      // Atualizar estado com os dados carregados
       setDashboardData({
-        overview: data[0],
-        resolution: data[1],
-        categories: data[2],
-        users: data[3],
-        financial: data[4]
+        overview: results[0],
+        resolution: results[1],
+        categories: results[2],
+        users: results[3],
+        financial: results[4]
       });
+
+      // Se há erros mas alguns dados foram carregados, mostrar warnings
+      if (errors.length > 0) {
+        setLoadingErrors(errors);
+        console.warn('Alguns dados não puderam ser carregados:', errors);
+      }
+
+      // Se todos falharam, mostrar erro principal
+      if (results.every(result => result === null)) {
+        setError('Não foi possível carregar nenhum dado do dashboard. Verifique os logs do servidor.');
+      }
+
     } catch (error) {
-      console.error('Erro ao carregar dashboard:', error);
+      console.error('Erro geral ao carregar dashboard:', error);
       setError(error instanceof Error ? error.message : 'Erro desconhecido ao carregar dashboard');
     } finally {
       setLoading(false);
@@ -281,7 +326,6 @@ export function AdminDashboard() {
     fetchDashboardData();
   }, []);
 
-  // Configurações dos gráficos
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -393,8 +437,8 @@ export function AdminDashboard() {
 
   const { overview, resolution, categories, users, financial } = dashboardData;
 
-  // Preparar dados para gráficos
-  const statusChartData = overview ? {
+  // Preparar dados para gráficos com verificações de segurança
+  const statusChartData = overview && overview.reports_by_status && Object.keys(overview.reports_by_status).length > 0 ? {
     labels: Object.keys(overview.reports_by_status),
     datasets: [{
       data: Object.values(overview.reports_by_status),
@@ -408,7 +452,7 @@ export function AdminDashboard() {
     }]
   } : null;
 
-  const categoryChartData = categories && categories.reports_by_category.length > 0 ? {
+  const categoryChartData = categories && categories.reports_by_category && categories.reports_by_category.length > 0 ? {
     labels: categories.reports_by_category.map(cat => cat.name),
     datasets: [{
       label: 'Reports por Categoria',
@@ -419,7 +463,7 @@ export function AdminDashboard() {
     }]
   } : null;
 
-  const monthlyChartData = resolution && resolution.resolved_by_month.length > 0 ? {
+  const monthlyChartData = resolution && resolution.resolved_by_month && resolution.resolved_by_month.length > 0 ? {
     labels: resolution.resolved_by_month.map(item => item.month),
     datasets: [{
       label: 'Reports Resolvidos',
@@ -431,7 +475,7 @@ export function AdminDashboard() {
     }]
   } : null;
 
-  const pointsDistributionData = users && Object.keys(users.points_distribution).length > 0 ? {
+  const pointsDistributionData = users && users.points_distribution && Object.keys(users.points_distribution).length > 0 ? {
     labels: Object.keys(users.points_distribution),
     datasets: [{
       data: Object.values(users.points_distribution),
@@ -454,6 +498,12 @@ export function AdminDashboard() {
         <div className={styles.headerLeft}>
           <h1 className={styles.title}>Dashboard Analítico</h1>
           <p className={styles.subtitle}>Análise estatística e métricas de performance</p>
+          {loadingErrors.length > 0 && (
+            <div className={styles.warningBanner}>
+              <AlertTriangle size={16} />
+              <span>Alguns dados não puderam ser carregados</span>
+            </div>
+          )}
         </div>
         <div className={styles.headerActions}>
           <button
@@ -557,7 +607,7 @@ export function AdminDashboard() {
         )}
 
         {/* Resolution Time Distribution */}
-        {resolution && Object.keys(resolution.resolution_time_distribution).length > 0 && (
+        {resolution && resolution.resolution_time_distribution && Object.keys(resolution.resolution_time_distribution).length > 0 && (
           <ChartCard title="Distribuição por Tempo de Resolução">
             <Bar
               data={{
@@ -576,11 +626,13 @@ export function AdminDashboard() {
         )}
 
         {/* Top Users */}
-        {users && users.top_users_by_reports.length > 0 && (
+        {users && users.top_users_by_reports && users.top_users_by_reports.length > 0 && (
           <ChartCard title="Top Utilizadores por Reports">
             <Bar
               data={{
-                labels: users.top_users_by_reports.slice(0, 8).map(user => user.name.split(' ')[0]),
+                labels: users.top_users_by_reports.slice(0, 8).map(user =>
+                  user.name.split(' ')[0] || 'Utilizador'
+                ),
                 datasets: [{
                   label: 'Número de Reports',
                   data: users.top_users_by_reports.slice(0, 8).map(user => user.reports_count),
@@ -591,6 +643,17 @@ export function AdminDashboard() {
               }}
               options={chartOptions}
             />
+          </ChartCard>
+        )}
+
+        {/* Placeholder para dados em falta */}
+        {!statusChartData && !categoryChartData && !monthlyChartData && (
+          <ChartCard title="Dados Não Disponíveis">
+            <div className={styles.noDataMessage}>
+              <AlertTriangle size={48} />
+              <p>Não há dados suficientes para gerar gráficos</p>
+              <p>Verifique se existem reports no sistema</p>
+            </div>
           </ChartCard>
         )}
       </div>
@@ -612,6 +675,18 @@ export function AdminDashboard() {
           Ver Reports
         </button>
       </div>
+
+      {/* Debug info se há erros */}
+      {loadingErrors.length > 0 && (
+        <div className={styles.debugInfo}>
+          <h3>Informações de Debug:</h3>
+          <ul>
+            {loadingErrors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
