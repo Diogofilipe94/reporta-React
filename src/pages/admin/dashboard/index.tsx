@@ -5,7 +5,7 @@ import { useTheme } from '../../../contexts/ThemeContext';
 import {
   BarChart3,
   Users,
-  DollarSign,
+  ,
   Download,
   RefreshCw,
   AlertTriangle,
@@ -30,6 +30,7 @@ import {
 } from 'chart.js';
 
 import { Bar, Pie, Line, Doughnut } from 'react-chartjs-2';
+import { FaEuroSign } from 'react-icons/fa';
 
 // Registar componentes Chart.js
 ChartJS.register(
@@ -568,7 +569,7 @@ export function AdminDashboard() {
             <KPICard
               title="Custo Total Estimado"
               value={`€${financial.total_estimated_cost.toLocaleString()}`}
-              icon={<DollarSign size={32} />}
+              icon={<FaEuroSign size={32} />}
               color="green"
               subtitle={`€${financial.average_cost_per_report.toFixed(0)} por report`}
             />
