@@ -105,7 +105,8 @@ export function AppLayout() {
             {/*Reports - todos os reports */}
             <Link to="/reports" className={styles.iconButton} title="Relatórios">
                 <p>Reports</p>
-            <ListOrdered size={22} />
+                <ListOrdered size={22} />
+            </Link>
 
             {/* Admin Users - apenas para admins */}
             {isLoggedIn && isAdmin() && (
