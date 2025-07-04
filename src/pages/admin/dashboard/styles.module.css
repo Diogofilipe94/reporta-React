@@ -26,10 +26,6 @@
   font-weight: 800;
   color: var(--textPrimary);
   margin: 0 0 0.5rem 0;
-  background: linear-gradient(135deg, var(--primary), var(--secondary));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .subtitle {
@@ -100,7 +96,7 @@
 
 .kpiCard {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--divider);
   border-radius: 1rem;
   padding: 2rem;
   display: flex;
@@ -137,45 +133,45 @@
   border-color: var(--divider);
 }
 
-/* KPI Colors */
+/* KPI Colors - Usando a paleta da aplicação */
 .kpiCard.kpi-blue .kpiIcon {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
 }
 
 .kpiCard.kpi-blue::before {
-  background: linear-gradient(90deg, transparent, #3498db, transparent);
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
 }
 
 .kpiCard.kpi-green .kpiIcon {
-  background: linear-gradient(135deg, #27ae60, #229954);
+  background: linear-gradient(135deg, var(--success), var(--success));
 }
 
 .kpiCard.kpi-green::before {
-  background: linear-gradient(90deg, transparent, #27ae60, transparent);
+  background: linear-gradient(90deg, transparent, var(--success), transparent);
 }
 
 .kpiCard.kpi-orange .kpiIcon {
-  background: linear-gradient(135deg, #f39c12, #e67e22);
+  background: linear-gradient(135deg, var(--warning), var(--warning));
 }
 
 .kpiCard.kpi-orange::before {
-  background: linear-gradient(90deg, transparent, #f39c12, transparent);
+  background: linear-gradient(90deg, transparent, var(--warning), transparent);
 }
 
 .kpiCard.kpi-purple .kpiIcon {
-  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
 }
 
 .kpiCard.kpi-purple::before {
-  background: linear-gradient(90deg, transparent, #9b59b6, transparent);
+  background: linear-gradient(90deg, transparent, var(--secondary), transparent);
 }
 
 .kpiCard.kpi-red .kpiIcon {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  background: linear-gradient(135deg, var(--danger), var(--danger));
 }
 
 .kpiCard.kpi-red::before {
-  background: linear-gradient(90deg, transparent, #e74c3c, transparent);
+  background: linear-gradient(90deg, transparent, var(--danger), transparent);
 }
 
 .kpiIcon {
@@ -185,9 +181,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--textTertiary);
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .kpiContent {
@@ -235,7 +231,7 @@
 
 .chartCard {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--divider);
   border-radius: 1rem;
   overflow: hidden;
   transition: all 0.3s ease;
@@ -286,7 +282,7 @@
   gap: 0.75rem;
   padding: 1rem 2rem;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--divider);
   border-radius: 0.75rem;
   color: var(--textPrimary);
   font-weight: 600;
@@ -342,7 +338,7 @@
 }
 
 .errorIcon {
-  color: var(--error);
+  color: var(--danger);
   margin-bottom: 1.5rem;
 }
 
@@ -379,6 +375,62 @@
   background: var(--primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 15px var(--shadow);
+}
+
+/* Warning Banner */
+.warningBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--warning);
+  color: var(--textTertiary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* No Data Message */
+.noDataMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  color: var(--textSecondary);
+  text-align: center;
+  gap: 1rem;
+}
+
+.noDataMessage p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Debug Info */
+.debugInfo {
+  background: var(--surface);
+  border: 1px solid var(--divider);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 2rem;
+}
+
+.debugInfo h3 {
+  color: var(--textPrimary);
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.debugInfo ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.debugInfo li {
+  color: var(--textSecondary);
+  font-size: 0.875rem;
+  margin-bottom: 0.25rem;
 }
 
 /* Responsividade Melhorada */
@@ -502,17 +554,17 @@ html {
 
 /* Gradientes para temas */
 .container:not(.darkMode) .kpiCard {
-  background: linear-gradient(135deg, var(--surface), rgba(255, 255, 255, 0.8));
+  background: linear-gradient(135deg, var(--surface), var(--fourth));
 }
 
 .container.darkMode .kpiCard {
-  background: linear-gradient(135deg, var(--surface), rgba(44, 44, 44, 0.8));
+  background: linear-gradient(135deg, var(--surface), var(--card));
 }
 
 .container:not(.darkMode) .chartCard {
-  background: linear-gradient(135deg, var(--surface), rgba(255, 255, 255, 0.9));
+  background: linear-gradient(135deg, var(--surface), var(--fourth));
 }
 
 .container.darkMode .chartCard {
-  background: linear-gradient(135deg, var(--surface), rgba(44, 44, 44, 0.9));
+  background: linear-gradient(135deg, var(--surface), var(--card));
 }
