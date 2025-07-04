@@ -90,18 +90,18 @@
 .kpiGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  gap: 1.2rem;
+  margin-bottom: 2.5rem;
 }
 
 .kpiCard {
   background: var(--surface);
   border: 1px solid var(--divider);
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.2rem;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
@@ -175,8 +175,8 @@
 }
 
 .kpiIcon {
-  width: 70px;
-  height: 70px;
+  width: 60px;
+  height: 60px;
   border-radius: 1rem;
   display: flex;
   align-items: center;
@@ -225,8 +225,8 @@
 .chartsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .chartCard {
@@ -249,20 +249,20 @@
 }
 
 .chartHeader {
-  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  padding: 1.2rem 1.5rem 0.8rem 1.5rem;
   border-bottom: 1px solid var(--divider);
-  background: linear-gradient(135deg, var(--surface), var(--background));
+  background: var(--surface);
 }
 
 .chartTitle {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: var(--textPrimary);
   margin: 0;
 }
 
 .chartContainer {
-  padding: 1.5rem;
+  padding: 1.2rem;
   position: relative;
 }
 
@@ -465,10 +465,10 @@
   }
 
   .kpiCard {
-    padding: 1.5rem;
+    padding: 1.2rem;
     flex-direction: column;
     text-align: center;
-    gap: 1rem;
+    gap: 0.8rem;
   }
 
   .kpiValue {
@@ -550,21 +550,4 @@ html {
 /* Melhorias para gráficos */
 .chartContainer canvas {
   border-radius: 0.5rem;
-}
-
-/* Gradientes para temas */
-.container:not(.darkMode) .kpiCard {
-  background: linear-gradient(135deg, var(--surface), var(--fourth));
-}
-
-.container.darkMode .kpiCard {
-  background: linear-gradient(135deg, var(--surface), var(--card));
-}
-
-.container:not(.darkMode) .chartCard {
-  background: linear-gradient(135deg, var(--surface), var(--fourth));
-}
-
-.container.darkMode .chartCard {
-  background: linear-gradient(135deg, var(--surface), var(--card));
 }
