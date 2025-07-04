@@ -497,7 +497,7 @@ export function AdminDashboard() {
       <div className={styles.header}>
         <div className={styles.headerLeft}>
           <h1 className={styles.title}>Dashboard Analítico</h1>
-          <p className={styles.subtitle}>Análise estatística e métricas de performance</p>
+          <p className={styles.subtitle}>Análise estatística e métricas</p>
           {loadingErrors.length > 0 && (
             <div className={styles.warningBanner}>
               <AlertTriangle size={16} />

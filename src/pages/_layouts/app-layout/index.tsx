@@ -1,10 +1,9 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import styles from './styles.module.css';
 import { useAuth } from "../../../hooks";
-import { LogOutIcon, Sun, Moon, BarChart3 } from "lucide-react";
+import { LogOutIcon, Sun, Moon, BarChart3, ListOrdered,  } from "lucide-react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { RiAdminLine } from "react-icons/ri";
-// Importe o componente Switch
 import Switch from "react-switch";
 
 export function AppLayout() {
@@ -102,6 +101,11 @@ export function AppLayout() {
                 <BarChart3 size={22} />
               </Link>
             )}
+
+            {/*Reports - todos os reports */}
+            <Link to="/reports" className={styles.iconButton} title="Relatórios">
+                <p>Reports</p>
+            <ListOrdered size={22} />
 
             {/* Admin Users - apenas para admins */}
             {isLoggedIn && isAdmin() && (
